@@ -1,107 +1,174 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:get/get.dart';
+import 'package:project_it/main_screen.dart'; // استيراد الشاشة الجديدة
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({Key? key}) : super(key: key);
 
-  @override
-  State<Login> createState() => _LoginState();
-}
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-class _LoginState extends State<Login> {
-  Future<void> signInWithGoogle() async {
-    try {
-      // تسجيل الدخول باستخدام Google
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        // إذا تم إلغاء تسجيل الدخول من قبل المستخدم
-        return;
-      }
+  //يتم اضافة دالة بنفس الاسم يلي انشاءته في اون تاب
+  Future signin() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _emailController.text.trim(),
+    );
+  }
 
-      // الحصول على المصادقة من Google
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+// يتم استخدام ديبوز ليتم التعطيل الكترول اءا لا يتم استحدامها
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
 
-      // التحقق من نطاق البريد الإلكتروني
-      final email = googleUser.email;
-      if (!email.endsWith('@it.misuratau.edu.ly')) {
-        // عرض رسالة خطأ إذا كان النطاق غير مطابق
-        showError("يجب استخدام بريد إلكتروني تابع للنطاق @it.misuratau.edu.ly");
-        return;
-      }
+  // دالة للتحقق من البريد الإلكتروني الجامعي
+  bool isValidUniversityEmail(String email) {
+    return email.endsWith('@it.misuratau.edu.ly'); // تحقق من البريد الجامعي
+  }
 
-      // متابعة المصادقة إذا كان البريد الإلكتروني صحيحًا
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+  void signInWithEmailPassword(BuildContext context) {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      // التحقق من الحقول الفارغة
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("الرجاء إدخال كل من البريد الإلكتروني وكلمة المرور."),
+          backgroundColor: Colors.red,
+        ),
       );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      // عرض رسالة نجاح أو الانتقال إلى الشاشة الرئيسية بعد نجاح تسجيل الدخول
-      print("Login successful!");
-    } catch (e) {
-      // التعامل مع الأخطاء أثناء عملية تسجيل الدخول
-      showError("حدث خطأ أثناء تسجيل الدخول: $e");
+    } else if (!isValidUniversityEmail(email)) {
+      // التحقق من صحة البريد الإلكتروني الجامعي
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              "Please use a valid university email (e.g., @it.misuratau.edu.ly)."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else if (password.length < 6) {
+      // التحقق من طول كلمة المرور
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Password must be at least 6 characters long."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      // التنقل إلى MineScreen إذا كانت المدخلات صحيحة
+      Get.to(() => const MineScreen());
     }
   }
 
-  void showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+  void signUpWithEmailPassword() {
+    // منطق التسجيل
+    print("Sign Up clicked");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      padding: const EdgeInsets.all(30),
-      child: ListView(children: [
-        Column(children: [
-          Container(height: 150),
-          Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
-              child: Image.asset(
-                "images/itel.PNG",
-                width: 200,
-                height: 200,
-              )),
-          Container(height: 20), // Column
-          const Text(
-            "Login",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-          Container(height: 10),
-          const Text(
-            "Login To Continue Using The App",
-            style: TextStyle(color: Colors.grey),
-          ),
-          Container(height: 20),
-          Container(height: 20),
-        ]),
-        MaterialButton(
-            height: 50,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.orange,
-            textColor: Colors.white,
-            onPressed: () {
-              signInWithGoogle();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: ListView(
+          children: [
+            const SizedBox(height: 80),
+            Center(
+              child: Column(
+                children: [
+                  Image.asset(
+                    "images/itel.PNG", // ضع مسار صورتك هنا
+                    width: 150,
+                    height: 150,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "IT Electronic Library",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange[800],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "تسجيل الدخول أو الاشتراك",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
+            const SizedBox(height: 30),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: "عنوان البريد الإلكتروني",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: "كلمة السر",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Image.asset(
-                  "images/google.PNG",
-                  width: 40,
-                  height: 40,
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "هل نسيت كلمة السر؟",
+                    style: TextStyle(color: Colors.orange[800]),
+                  ),
                 ),
-                const Text("  Login With Google")
               ],
-            ))
-      ]),
-    ));
+            ),
+            const SizedBox(height: 20),
+            //button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: GestureDetector(
+                onTap: signin,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 9, 17, 107),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Center(
+                    child: Text('تسجيل دخــول '),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+            MaterialButton(
+              height: 50,
+              minWidth: double.infinity,
+              color: Colors.orange[800]?.withOpacity(0.7),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              onPressed: () {
+                signUpWithEmailPassword();
+              },
+              child: const Text(
+                "انشاء حساب",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 }
