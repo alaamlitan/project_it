@@ -1,8 +1,5 @@
 import 'package:project_it/auth/authuntication.dart';
-import 'package:project_it/auth/login.dart';
 import 'package:flutter/material.dart';
-import 'package:project_it/auth/login.dart'; // إذا كنت تريد هذا الملف فقط
-import 'package:get/get.dart'; // مكتبة Get لإدارة التنقل
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -20,10 +17,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Authuntication(),
-      
     );
   }
 }

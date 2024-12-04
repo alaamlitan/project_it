@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_it/main_screen.dart'; // استيراد الشاشة الجديدة
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({super.key});
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -44,8 +45,8 @@ class LoginScreen extends StatelessWidget {
       // التحقق من صحة البريد الإلكتروني الجامعي
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-              "Please use a valid university email (e.g., @it.misuratau.edu.ly)."),
+          content:
+              Text("رجاءا تحقق من بريدك الجامعي(e.g., @it.misuratau.edu.ly)."),
           backgroundColor: Colors.red,
         ),
       );
@@ -65,7 +66,9 @@ class LoginScreen extends StatelessWidget {
 
   void signUpWithEmailPassword() {
     // منطق التسجيل
-    print("Sign Up clicked");
+    if (kDebugMode) {
+      print("Sign Up clicked");
+    }
   }
 
   @override
@@ -145,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                         color: const Color.fromARGB(255, 9, 17, 107),
                         borderRadius: BorderRadius.circular(12)),
                     child: const Center(
-                      child:  Text('تسجيل دخــول '),
+                      child: Text('تسجيل دخــول '),
                     ),
                   ),
                 ),

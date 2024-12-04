@@ -1,16 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_it/auth/login.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  SignUpScreenState createState() => SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -51,11 +52,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // بعد نجاح التسجيل، التنقل إلى الصفحة الرئيسية أو شاشة أخرى
       Get.to(() => LoginScreen()); // استبدل Placeholder بشاشة التطبيق الرئيسية
     } catch (e) {
-      print("Error: $e");
+      if (kDebugMode) {
+        print("Error: $e");
+      }
       // عرض خطأ إذا فشل التسجيل
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("فشل في التسجيل. يرجى المحاولة مرة أخرى."),
-          backgroundColor: Colors.red));
+      Get.snackbar(
+        "خطأ", // العنوان
+        "فشل في التسجيل. يرجى المحاولة مرة أخرى.", // الرسالة
+        snackPosition: SnackPosition.BOTTOM, // موضع التنبيه (أسفل الشاشة)
+        backgroundColor: Colors.red, // لون الخلفية
+        colorText: Colors.white, // لون النص
+        duration: const Duration(seconds: 3), // مدة عرض التنبيه
+        margin: const EdgeInsets.all(10), // مسافة حول التنبيه
+        borderRadius: 8, // زوايا مستديرة للتنبيه
+      );
     }
   }
 
