@@ -71,102 +71,104 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: ListView(
-          children: [
-            const SizedBox(height: 80),
-            Center(
-              child: Column(
-                children: [
-                  Image.asset(
-                    "images/itel.PNG", // ضع مسار صورتك هنا
-                    width: 150,
-                    height: 150,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "IT Electronic Library",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.orange[800],
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: ListView(
+            children: [
+              const SizedBox(height: 80),
+              Center(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      "images/itel.PNG", // ضع مسار صورتك هنا
+                      width: 150,
+                      height: 150,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "تسجيل الدخول أو الاشتراك",
-                    style: TextStyle(color: Colors.grey),
+                    const SizedBox(height: 20),
+                    Text(
+                      "IT Electronic Library",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange[800],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "تسجيل الدخول أو الاشتراك",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
+              const SizedBox(height: 30),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: "عنوان البريد الإلكتروني",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "كلمة السر",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "هل نسيت كلمة السر؟",
+                      style: TextStyle(color: Colors.orange[800]),
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 40),
-            const SizedBox(height: 30),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: "عنوان البريد الإلكتروني",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "كلمة السر",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "هل نسيت كلمة السر؟",
-                    style: TextStyle(color: Colors.orange[800]),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            //button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: GestureDetector(
-                onTap: signin,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 9, 17, 107),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                    child: Text('تسجيل دخــول '),
+              const SizedBox(height: 20),
+              //button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: GestureDetector(
+                  onTap: signin,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 9, 17, 107),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: const Center(
+                      child:  Text('تسجيل دخــول '),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 25),
-            MaterialButton(
-              height: 50,
-              minWidth: double.infinity,
-              color: Colors.orange[800]?.withOpacity(0.7),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+              const SizedBox(height: 25),
+              MaterialButton(
+                height: 50,
+                minWidth: double.infinity,
+                color: Colors.orange[800]?.withOpacity(0.7),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                onPressed: () {
+                  signUpWithEmailPassword();
+                },
+                child: const Text(
+                  "انشاء حساب",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              onPressed: () {
-                signUpWithEmailPassword();
-              },
-              child: const Text(
-                "انشاء حساب",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
